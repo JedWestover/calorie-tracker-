@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "./authConfig";
-import { USDA_API_KEY } from "./usdaConfig";
 import {
   LineChart,
   Line,
@@ -20,15 +19,10 @@ const APP_VERSION = "1.0.0";
 const BACKUP_URL =
   GRAPH_BASE + "/me/drive/special/approot:/backup.json:/content";
 
-const USDA_SEARCH_URL = [
-  "https:",
-  "",
-  "api.nal.usda.gov",
-  "fdc",
-  "v1",
-  "foods",
-  "search",
-].join("/");
+const USDA_SEARCH_URL = "/api/usda";
+
+const OPEN_FOOD_FACTS_URL =
+  "/api/open-food-facts";
 
 const ACTIVITY_DATABASE = [
   { name: "Walking", category: "Cardio", levels: { light: 2.8, moderate: 3.5, vigorous: 4.3 } },
@@ -49,6 +43,40 @@ const ACTIVITY_DATABASE = [
   { name: "Yard Work", category: "Daily Activity", levels: { light: 3.5, moderate: 5.0, vigorous: 6.5 } },
   { name: "HIIT", category: "Cardio", levels: { light: 6.0, moderate: 9.0, vigorous: 12.0 } },
 ];
+
+function getLocalDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return year + "-" + month + "-" + day;
+}
+
+function normalizeEntryDate(entry) {
+  if (entry.date && /^\d{4}-\d{2}-\d{2}$/.test(entry.date)) {
+    return entry.date;
+  }
+
+  const parsedDate = entry.date ? new Date(entry.date) : new Date();
+  return Number.isNaN(parsedDate.getTime())
+    ? getLocalDateKey(new Date())
+    : getLocalDateKey(parsedDate);
+}
+
+function normalizeEntries(entries) {
+  return entries.map(function (entry) {
+    return { ...entry, date: normalizeEntryDate(entry) };
+  });
+}
+
+function getOpenFoodFactsCalories(nutriments) {
+  return roundOne(
+    nutriments["energy-kcal_100g"] ||
+    nutriments["energy-kcal_serving"] ||
+    nutriments["energy-kcal"] ||
+    0
+  );
+}
 
 export default function App() {
   const { instance, accounts } = useMsal();
@@ -97,7 +125,7 @@ export default function App() {
 
   const [foodEntries, setFoodEntries] = useState(function () {
     const saved = localStorage.getItem("foodEntries");
-    return saved ? JSON.parse(saved) : [];
+    return saved ? normalizeEntries(JSON.parse(saved)) : [];
   });
 
   const [savedFoods, setSavedFoods] = useState(() => {
@@ -111,8 +139,10 @@ export default function App() {
 
   const [workoutEntries, setWorkoutEntries] = useState(function () {
     const saved = localStorage.getItem("workoutEntries");
-    return saved ? JSON.parse(saved) : [];
+    return saved ? normalizeEntries(JSON.parse(saved)) : [];
   });
+
+  const [todayKey, setTodayKey] = useState(() => getLocalDateKey(new Date()));
 
   const [activeTab, setActiveTab] = useState("food");
   const [status, setStatus] = useState("");
@@ -125,6 +155,16 @@ export default function App() {
   const hasAutoRestored = useRef(false);
 
   const isSignedIn = accounts.length > 0;
+
+  useEffect(function () {
+    const timer = setInterval(function () {
+      setTodayKey(getLocalDateKey(new Date()));
+    }, 60000);
+
+    return function () {
+      clearInterval(timer);
+    };
+  }, []);
 
   useEffect(function () {
     localStorage.setItem("goal", String(goal));
@@ -226,6 +266,11 @@ export default function App() {
   }, [selectedActivity, activityIntensity, activityDuration, bodyWeightLbs]);
 
   async function signIn() {
+    if (!instance) {
+      setStatus("Sign-in requires localhost or an HTTPS connection.");
+      return;
+    }
+
     try {
       await instance.loginRedirect(loginRequest);
     } catch (error) {
@@ -376,9 +421,15 @@ export default function App() {
       setGoal(Number(backup.goal || 2200));
       setBodyWeightLbs(Number(backup.bodyWeightLbs || 180));
       setWeightHistory(Array.isArray(backup.weightHistory) ? backup.weightHistory : []);
-      setFoodEntries(Array.isArray(backup.foodEntries) ? backup.foodEntries : []);
+      setFoodEntries(
+        Array.isArray(backup.foodEntries)
+          ? normalizeEntries(backup.foodEntries)
+          : []
+      );
       setWorkoutEntries(
-        Array.isArray(backup.workoutEntries) ? backup.workoutEntries : []
+        Array.isArray(backup.workoutEntries)
+          ? normalizeEntries(backup.workoutEntries)
+          : []
       );
       setGoalWeight(
   Number(backup.goalWeight || 170)
@@ -423,58 +474,87 @@ setSavedFoods(
   }
 
   async function searchFoods() {
-    if (!foodSearch.trim()) return;
+    const query = foodSearch.trim();
+    if (!query) return;
 
     try {
-      setFoodSearchStatus("Searching USDA foods...");
+      setFoodSearchStatus("Searching USDA and Open Food Facts...");
       setFoodResults([]);
-      setFoodSearch("");
 
       const searchUrl =
         USDA_SEARCH_URL +
-        "?api_key=" +
-        encodeURIComponent(USDA_API_KEY) +
-        "&query=" +
-        encodeURIComponent(foodSearch) +
+        "?query=" +
+        encodeURIComponent(query) +
         "&pageSize=10";
 
-      const response = await fetch(searchUrl);
+      const openFoodFactsUrl =
+        OPEN_FOOD_FACTS_URL +
+        "?search_terms=" +
+        encodeURIComponent(query) +
+        "&page_size=10" +
+        "&fields=code,product_name,brands,quantity,nutriments";
 
-      if (!response.ok) {
-        throw new Error("USDA food search failed: " + response.status);
-      }
+      const responses = await Promise.allSettled([
+        fetch(searchUrl),
+        fetch(openFoodFactsUrl),
+      ]);
 
-      const data = await response.json();
-      const foods = Array.isArray(data.foods) ? data.foods : [];
+      const mappedResults = [];
 
-      const mappedResults = foods
-        .map(function (food) {
-          const calories = getNutrient(food, ["Energy"]);
-          const protein = getNutrient(food, ["Protein"]);
-          const carbs = getNutrient(food, ["Carbohydrate"]);
-          const fat = getNutrient(food, ["Total lipid", "fat"]);
+      if (responses[0].status === "fulfilled" && responses[0].value.ok) {
+        const data = await responses[0].value.json();
+        const foods = Array.isArray(data.foods) ? data.foods : [];
 
-          return {
-            id: food.fdcId,
+        foods.forEach(function (food) {
+          const item = {
+            id: "usda-" + food.fdcId,
+            source: "USDA",
             name: food.description || "Unnamed food",
             brand: food.brandOwner || food.brandName || food.dataType || "",
-            calories: calories,
-            protein: protein,
-            carbs: carbs,
-            fat: fat,
+            calories: getNutrient(food, ["Energy"]),
+            protein: getNutrient(food, ["Protein"]),
+            carbs: getNutrient(food, ["Carbohydrate"]),
+            fat: getNutrient(food, ["Total lipid", "fat"]),
             servingSize: "base amount from USDA result",
           };
-        })
-        .filter(function (item) {
-          return item.name && item.calories > 0;
+
+          if (item.name && item.calories > 0) mappedResults.push(item);
         });
+      }
+
+      if (responses[1].status === "fulfilled" && responses[1].value.ok) {
+        const data = await responses[1].value.json();
+        const products = Array.isArray(data.products) ? data.products : [];
+
+        products.forEach(function (product) {
+          const nutriments = product.nutriments || {};
+          const item = {
+            id: "off-" + (product.code || product.id || product.product_name),
+            source: "Open Food Facts",
+            name: product.product_name || product.product_name_en || "Unnamed food",
+            brand: product.brands || "",
+            calories: getOpenFoodFactsCalories(nutriments),
+            protein: roundOne(nutriments.proteins_100g),
+            carbs: roundOne(nutriments.carbohydrates_100g),
+            fat: roundOne(nutriments.fat_100g),
+            servingSize: product.quantity
+              ? product.quantity + " (nutrition per 100g)"
+              : "nutrition per 100g",
+          };
+
+          if (item.name && item.calories > 0) mappedResults.push(item);
+        });
+      }
 
       setFoodResults(mappedResults);
+      setFoodSearch("");
 
       if (mappedResults.length === 0) {
-        setFoodSearchStatus("No USDA foods found with calorie data.");
+        setFoodSearchStatus("No foods found with calorie data.");
       } else {
-        setFoodSearchStatus("Select a food, then adjust serving multiplier.");
+        setFoodSearchStatus(
+          "Select a USDA or Open Food Facts result, then adjust serving multiplier."
+        );
       }
     } catch (error) {
       console.error(error);
@@ -612,7 +692,7 @@ function selectActivity(activity) {
 
   const newEntry = {
     id: Date.now(),
-    date: new Date().toLocaleDateString(),
+    date: todayKey,
     name: foodName,
     calories: Number(foodCalories),
     protein: Number(foodProtein || 0),
@@ -637,6 +717,7 @@ function selectActivity(activity) {
 
       const newEntry = {
         id: Date.now(),
+        date: todayKey,
         name: workoutName,
         calories: Number(workoutCalories),
         intensity: activityIntensity,
@@ -681,13 +762,21 @@ setActivitySearchStatus("");
       );
     }
 
+    const todayFoodEntries = foodEntries.filter(function (entry) {
+      return normalizeEntryDate(entry) === todayKey;
+    });
+
+    const todayWorkoutEntries = workoutEntries.filter(function (entry) {
+      return normalizeEntryDate(entry) === todayKey;
+    });
+
     const caloriesConsumed = useMemo(
       function () {
-        return foodEntries.reduce(function (sum, item) {
+        return todayFoodEntries.reduce(function (sum, item) {
           return sum + Number(item.calories || 0);
         }, 0);
       },
-      [foodEntries]
+      [todayFoodEntries]
     );
 
     const weightChartData = [...weightHistory]
@@ -701,23 +790,23 @@ setActivitySearchStatus("");
 
     const caloriesBurned = useMemo(
       function () {
-        return workoutEntries.reduce(function (sum, item) {
+        return todayWorkoutEntries.reduce(function (sum, item) {
           return sum + Number(item.calories || 0);
         }, 0);
       },
-      [workoutEntries]
+      [todayWorkoutEntries]
     );
 
     const totalProtein = useMemo(
       function () {
-        return foodEntries.reduce(function (sum, item) {
+        return todayFoodEntries.reduce(function (sum, item) {
           return sum + Number(item.protein || 0);
         }, 0);
       },
-      [foodEntries]
+      [todayFoodEntries]
     );
 
-    const nutritionChartData = foodEntries.map(
+    const nutritionChartData = todayFoodEntries.map(
       function (entry) {
         return {
           name: entry.name,
@@ -763,6 +852,36 @@ setActivitySearchStatus("");
 
     const dailyNutritionData =
       Object.values(nutritionByDay);
+
+    const dailyHistory = {};
+
+    foodEntries.forEach(function (entry) {
+      const day = normalizeEntryDate(entry);
+
+      if (!dailyHistory[day]) {
+        dailyHistory[day] = { date: day, consumed: 0, burned: 0 };
+      }
+
+      dailyHistory[day].consumed += Number(entry.calories || 0);
+    });
+
+    workoutEntries.forEach(function (entry) {
+      const day = normalizeEntryDate(entry);
+
+      if (!dailyHistory[day]) {
+        dailyHistory[day] = { date: day, consumed: 0, burned: 0 };
+      }
+
+      dailyHistory[day].burned += Number(entry.calories || 0);
+    });
+
+    const previousDays = Object.values(dailyHistory)
+      .filter(function (day) {
+        return day.date !== todayKey;
+      })
+      .sort(function (a, b) {
+        return b.date.localeCompare(a.date);
+      });
 
       const recentFoods = [];
 
@@ -823,20 +942,20 @@ const mostUsedFoods = Object.values(foodUsageMap)
 
     const totalCarbs = useMemo(
       function () {
-        return foodEntries.reduce(function (sum, item) {
+        return todayFoodEntries.reduce(function (sum, item) {
           return sum + Number(item.carbs || 0);
         }, 0);
       },
-      [foodEntries]
+      [todayFoodEntries]
     );
 
     const totalFat = useMemo(
       function () {
-        return foodEntries.reduce(function (sum, item) {
+        return todayFoodEntries.reduce(function (sum, item) {
           return sum + Number(item.fat || 0);
         }, 0);
       },
-      [foodEntries]
+      [todayFoodEntries]
     );
 
     const currentWeight =
@@ -1015,7 +1134,7 @@ const mostUsedFoods = Object.values(foodUsageMap)
               <div className="mt-4 space-y-3">
                 <div className="rounded-xl bg-slate-50 p-3">
                   <label className="text-sm font-semibold text-slate-600">
-                    Search USDA food database
+                    Search food databases
                   </label>
 
                   <div className="mt-2 flex flex-col gap-2 sm:flex-row">
@@ -1036,7 +1155,7 @@ const mostUsedFoods = Object.values(foodUsageMap)
                     </button>
                   </div>
 
-{foodSearchStatus && (
+                  {foodSearchStatus && (
   <p className="mt-2 rounded-lg bg-emerald-50 p-2 text-sm text-emerald-700">
     {foodSearchStatus}
   </p>
@@ -1055,6 +1174,10 @@ const mostUsedFoods = Object.values(foodUsageMap)
                           className="w-full rounded-xl border bg-white p-3 text-left hover:bg-emerald-50"
                         >
                           <p className="font-semibold">{item.name}</p>
+
+                          <p className="text-xs font-semibold uppercase text-slate-400">
+                            {item.source}
+                          </p>
 
                           {item.brand && (
                             <p className="text-sm text-slate-500">
@@ -1289,7 +1412,7 @@ const mostUsedFoods = Object.values(foodUsageMap)
               <LogList
                 title="Food Log"
                 emptyText="No food entries yet."
-                entries={foodEntries}
+                entries={todayFoodEntries}
                 type="food"
                 onDelete={deleteFood}
               />
@@ -1463,7 +1586,7 @@ const mostUsedFoods = Object.values(foodUsageMap)
               <LogList
                 title="Workout Log"
                 emptyText="No workout entries yet."
-                entries={workoutEntries}
+                entries={todayWorkoutEntries}
                 type="workout"
                 onDelete={deleteWorkout}
               />
@@ -1576,6 +1699,42 @@ const mostUsedFoods = Object.values(foodUsageMap)
                 style={{ width: progress + "%" }}
               />
             </div>
+          </section>
+
+          <section className="rounded-2xl bg-white p-4 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-bold">Daily History</h2>
+                <p className="text-sm text-slate-500">
+                  Today, {todayKey}, is shown in the active logs above.
+                </p>
+              </div>
+              <p className="text-sm font-semibold text-emerald-600">
+                {todayFoodEntries.length + todayWorkoutEntries.length} today
+              </p>
+            </div>
+
+            {previousDays.length === 0 ? (
+              <p className="mt-4 text-sm text-slate-500">
+                Previous days will appear here after you log another day.
+              </p>
+            ) : (
+              <div className="mt-4 space-y-2">
+                {previousDays.map(function (day) {
+                  return (
+                    <div
+                      key={day.date}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3"
+                    >
+                      <p className="font-semibold">{day.date}</p>
+                      <p className="text-sm text-slate-600">
+                        {Math.round(day.consumed)} consumed | {Math.round(day.burned)} burned | Net {Math.round(day.consumed - day.burned)} cal
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </section>
 
           <section className="rounded-2xl bg-white p-4 shadow-sm">

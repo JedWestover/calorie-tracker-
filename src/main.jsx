@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { PublicClientApplication } from "@azure/msal-browser";
-import { MsalProvider } from "@azure/msal-react";
+import { MsalContext, MsalProvider } from "@azure/msal-react";
 
 import { registerSW } from "virtual:pwa-register";
 
@@ -14,12 +14,18 @@ import "./index.css";
 
 import { msalConfig } from "./authConfig";
 
-const msalInstance = new PublicClientApplication(msalConfig);
+const app = window.isSecureContext ? (
+  <MsalProvider instance={new PublicClientApplication(msalConfig)}>
+    <App />
+  </MsalProvider>
+) : (
+  <MsalContext.Provider
+    value={{ instance: null, accounts: [], inProgress: "none" }}
+  >
+    <App />
+  </MsalContext.Provider>
+);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <MsalProvider instance={msalInstance}>
-      <App />
-    </MsalProvider>
-  </React.StrictMode>
+  <React.StrictMode>{app}</React.StrictMode>
 );

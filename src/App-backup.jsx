@@ -312,15 +312,21 @@ export default function App() {
       setStatus(isAuto ? "Auto-backup running..." : "Saving backup...");
 
       const backup = {
-        app: "Calories Fitness Tracker",
-        version: 6,
-        goal: goal,
-        bodyWeightLbs: bodyWeightLbs,
-        weightHistory: weightHistory,
-        foodEntries: foodEntries,
-        workoutEntries: workoutEntries,
-        lastUpdated: new Date().toISOString(),
-      };
+  app: "Calories Fitness Tracker",
+  version: 7,
+
+  goal: goal,
+  bodyWeightLbs: bodyWeightLbs,
+  goalWeight: goalWeight,
+
+  weightHistory: weightHistory,
+  foodEntries: foodEntries,
+  workoutEntries: workoutEntries,
+
+  savedFoods: savedFoods,
+
+  lastUpdated: new Date().toISOString(),
+};
 
       const response = await graphFetch(BACKUP_URL, {
         method: "PUT",
@@ -374,6 +380,15 @@ export default function App() {
       setWorkoutEntries(
         Array.isArray(backup.workoutEntries) ? backup.workoutEntries : []
       );
+      setGoalWeight(
+  Number(backup.goalWeight || 170)
+);
+
+setSavedFoods(
+  Array.isArray(backup.savedFoods)
+    ? backup.savedFoods
+    : []
+);
 
       const time = new Date().toLocaleTimeString();
       setLastRestore(time);
