@@ -10,7 +10,9 @@ export default async function handler(request, response) {
     return;
   }
 
-  const upstreamUrl = new URL("https://api.openfoodfacts.org/api/v2/search");
+  const upstreamUrl = new URL(
+    "https://world.openfoodfacts.org/api/v2/search"
+  );
   upstreamUrl.searchParams.set("search_terms", searchTerms);
   upstreamUrl.searchParams.set("page_size", "10");
   upstreamUrl.searchParams.set(

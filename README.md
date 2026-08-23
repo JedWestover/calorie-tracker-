@@ -38,7 +38,7 @@ npm run dev
 
 Open the local URL shown by Vite. Microsoft sign-in requires `localhost` or an HTTPS URL. Add that URL as a redirect URI in the Azure app registration, and grant delegated permissions for `User.Read` and `Files.ReadWrite`.
 
-For a GitHub Pages build, add `VITE_USDA_API_KEY` as a repository or environment secret/variable in the build workflow, then publish a new build. Because this is a static app, the key is included in the browser bundle and should be restricted or replaced with a server-side proxy for production use.
+For Vercel, add `USDA_API_KEY` as an environment variable and redeploy. Keep the key server-side; do not use a `VITE_` prefix for this variable.
 
 ## Scripts
 
@@ -51,6 +51,6 @@ npm run lint     # Run ESLint
 
 ## Deployment note
 
-The repository includes a Vercel serverless function for Open Food Facts at `/api/open-food-facts`, which avoids browser CORS restrictions. USDA search uses the public API directly, so the USDA key is visible in the browser; use a serverless or backend proxy for USDA if the key must remain private. Vercel is recommended for deployment because GitHub Pages cannot run the API function. Configure the Azure redirect URI for the final HTTPS domain before enabling sign-in there.
+The repository includes Vercel serverless functions for `/api/usda` and `/api/open-food-facts`, which avoid browser CORS restrictions. Vercel is required because GitHub Pages cannot run these API functions. Configure the Azure redirect URI for the final HTTPS domain before enabling sign-in there.
 
 Do not commit `src/.env` or any API keys. The repository ignores `.env` files; `src/.env.example` contains placeholders only.

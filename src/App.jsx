@@ -16,13 +16,10 @@ import {
 
 const GRAPH_BASE = ["https:", "", "graph.microsoft.com", "v1.0"].join("/");
 const APP_VERSION = "1.1.0";
-const USDA_API_KEY = import.meta.env.VITE_USDA_API_KEY || "";
 const BACKUP_URL =
   GRAPH_BASE + "/me/drive/special/approot:/backup.json:/content";
 
-const USDA_SEARCH_URL = USDA_API_KEY
-  ? "https://api.nal.usda.gov/fdc/v1/foods/search/"
-  : "/api/usda";
+const USDA_SEARCH_URL = "/api/usda";
 
 const OPEN_FOOD_FACTS_URL = "/api/open-food-facts";
 
@@ -487,10 +484,7 @@ setSavedFoods(
         USDA_SEARCH_URL +
         "?query=" +
         encodeURIComponent(query) +
-        "&pageSize=10" +
-        (USDA_API_KEY
-          ? "&api_key=" + encodeURIComponent(USDA_API_KEY)
-          : "");
+        "&pageSize=10";
 
       const openFoodFactsUrl =
         OPEN_FOOD_FACTS_URL +
