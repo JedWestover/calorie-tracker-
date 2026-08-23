@@ -15,14 +15,15 @@ import {
 } from "recharts";
 
 const GRAPH_BASE = ["https:", "", "graph.microsoft.com", "v1.0"].join("/");
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.1.0";
 const BACKUP_URL =
   GRAPH_BASE + "/me/drive/special/approot:/backup.json:/content";
 
-const USDA_SEARCH_URL = "/api/usda";
+const USDA_SEARCH_URL = import.meta.env.VITE_USDA_API_KEY
+  ? "https://api.nal.usda.gov/fdc/v1/foods/search"
+  : "/api/usda";
 
-const OPEN_FOOD_FACTS_URL =
-  "/api/open-food-facts";
+const OPEN_FOOD_FACTS_URL = "https://api.openfoodfacts.org/api/v2/search";
 
 const ACTIVITY_DATABASE = [
   { name: "Walking", category: "Cardio", levels: { light: 2.8, moderate: 3.5, vigorous: 4.3 } },
@@ -485,7 +486,10 @@ setSavedFoods(
         USDA_SEARCH_URL +
         "?query=" +
         encodeURIComponent(query) +
-        "&pageSize=10";
+        "&pageSize=10" +
+        (import.meta.env.VITE_USDA_API_KEY
+          ? "&api_key=" + encodeURIComponent(import.meta.env.VITE_USDA_API_KEY)
+          : "");
 
       const openFoodFactsUrl =
         OPEN_FOOD_FACTS_URL +

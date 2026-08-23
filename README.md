@@ -1,16 +1,56 @@
-# React + Vite
+# Calories + Fitness Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Version 1.1.0 of a React and Vite app for tracking food, workouts, nutrition, weight progress, and OneDrive backups.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Log food with calories, protein, carbohydrates, fat, and serving multipliers
+- Search USDA FoodData Central and Open Food Facts
+- Search activities and estimate calories burned from MET values
+- Track weight history and visualize nutrition and weight trends
+- Save frequently used foods and workouts
+- Back up and restore data through Microsoft OneDrive
+- Installable Progressive Web App (PWA)
 
-## React Compiler
+## Requirements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 20 or newer
+- A USDA FoodData Central API key for USDA search
+- An Azure app registration configured for Microsoft account sign-in and OneDrive access
 
-## Expanding the ESLint configuration
+## Local setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+```
+
+Copy `src/.env.example` to `src/.env` and add your USDA API key:
+
+```env
+VITE_USDA_API_KEY=your_usda_api_key
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open the local URL shown by Vite. Microsoft sign-in requires `localhost` or an HTTPS URL. Add that URL as a redirect URI in the Azure app registration, and grant delegated permissions for `User.Read` and `Files.ReadWrite`.
+
+For a GitHub Pages build, add `VITE_USDA_API_KEY` as a repository or environment secret/variable in the build workflow, then publish a new build. Because this is a static app, the key is included in the browser bundle and should be restricted or replaced with a server-side proxy for production use.
+
+## Scripts
+
+```bash
+npm run dev      # Start the development server
+npm run build    # Create a production build
+npm run preview  # Preview the production build locally
+npm run lint     # Run ESLint
+```
+
+## Deployment note
+
+GitHub Pages is a static host, so production search uses the public USDA and Open Food Facts APIs directly. This makes the USDA key visible in the browser; use an equivalent serverless or backend proxy instead if the key must remain private. Configure the Azure redirect URI for the final HTTPS domain before enabling sign-in there.
+
+Do not commit `src/.env` or any API keys. The repository ignores `.env` files; `src/.env.example` contains placeholders only.

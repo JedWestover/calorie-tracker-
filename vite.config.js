@@ -96,6 +96,7 @@ export default defineConfig(({ mode }) => {
   const usdaApiKey = env.VITE_USDA_API_KEY;
 
   return {
+    envDir: "src",
     plugins: [
       usdaProxy(usdaApiKey),
       openFoodFactsProxy(),
