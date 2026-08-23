@@ -16,11 +16,12 @@ import {
 
 const GRAPH_BASE = ["https:", "", "graph.microsoft.com", "v1.0"].join("/");
 const APP_VERSION = "1.1.0";
+const USDA_API_KEY = import.meta.env.VITE_USDA_API_KEY || "";
 const BACKUP_URL =
   GRAPH_BASE + "/me/drive/special/approot:/backup.json:/content";
 
-const USDA_SEARCH_URL = import.meta.env.VITE_USDA_API_KEY
-  ? "https://api.nal.usda.gov/fdc/v1/foods/search"
+const USDA_SEARCH_URL = USDA_API_KEY
+  ? "https://api.nal.usda.gov/fdc/v1/foods/search/"
   : "/api/usda";
 
 const OPEN_FOOD_FACTS_URL = "https://api.openfoodfacts.org/api/v2/search";
@@ -487,8 +488,8 @@ setSavedFoods(
         "?query=" +
         encodeURIComponent(query) +
         "&pageSize=10" +
-        (import.meta.env.VITE_USDA_API_KEY
-          ? "&api_key=" + encodeURIComponent(import.meta.env.VITE_USDA_API_KEY)
+        (USDA_API_KEY
+          ? "&api_key=" + encodeURIComponent(USDA_API_KEY)
           : "");
 
       const openFoodFactsUrl =
@@ -526,6 +527,10 @@ setSavedFoods(
         });
       }
 
+      if (responses[0].status === "fulfilled" && !responses[0].value.ok) {
+        console.error("USDA search failed:", responses[0].value.status);
+      }
+
       if (responses[1].status === "fulfilled" && responses[1].value.ok) {
         const data = await responses[1].value.json();
         const products = Array.isArray(data.products) ? data.products : [];
@@ -548,6 +553,13 @@ setSavedFoods(
 
           if (item.name && item.calories > 0) mappedResults.push(item);
         });
+      }
+
+      if (responses[1].status === "fulfilled" && !responses[1].value.ok) {
+        console.error(
+          "Open Food Facts search failed:",
+          responses[1].value.status
+        );
       }
 
       setFoodResults(mappedResults);
