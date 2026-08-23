@@ -51,6 +51,6 @@ npm run lint     # Run ESLint
 
 ## Deployment note
 
-GitHub Pages is a static host, so production search uses the public USDA and Open Food Facts APIs directly. This makes the USDA key visible in the browser; use an equivalent serverless or backend proxy instead if the key must remain private. Configure the Azure redirect URI for the final HTTPS domain before enabling sign-in there.
+The repository includes a Vercel serverless function for Open Food Facts at `/api/open-food-facts`, which avoids browser CORS restrictions. USDA search uses the public API directly, so the USDA key is visible in the browser; use a serverless or backend proxy for USDA if the key must remain private. Vercel is recommended for deployment because GitHub Pages cannot run the API function. Configure the Azure redirect URI for the final HTTPS domain before enabling sign-in there.
 
 Do not commit `src/.env` or any API keys. The repository ignores `.env` files; `src/.env.example` contains placeholders only.
