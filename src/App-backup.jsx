@@ -192,6 +192,7 @@ export default function App() {
     autoBackupEnabled,
   ]);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(function () {
     if (!selectedFoodBase) return;
 
@@ -224,6 +225,7 @@ export default function App() {
 
     setWorkoutCalories(String(calories));
   }, [selectedActivity, activityIntensity, activityDuration, bodyWeightLbs]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   async function signIn() {
     try {

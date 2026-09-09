@@ -136,6 +136,11 @@ export default function App() {
       : [];
   });
 
+  const [savedWorkouts, setSavedWorkouts] = useState(() => {
+    const saved = localStorage.getItem("savedWorkouts");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [workoutEntries, setWorkoutEntries] = useState(function () {
     const saved = localStorage.getItem("workoutEntries");
     return saved ? normalizeEntries(JSON.parse(saved)) : [];
@@ -144,6 +149,7 @@ export default function App() {
   const [todayKey, setTodayKey] = useState(() => getLocalDateKey(new Date()));
 
   const [activeTab, setActiveTab] = useState("food");
+  const [activeScreen, setActiveScreen] = useState("tracker");
   const [status, setStatus] = useState("");
   const [autoBackupEnabled, setAutoBackupEnabled] = useState(true);
   const [autoRestoreEnabled, setAutoRestoreEnabled] = useState(true);
@@ -193,6 +199,10 @@ export default function App() {
   }, [savedFoods]);
 
   useEffect(function () {
+    localStorage.setItem("savedWorkouts", JSON.stringify(savedWorkouts));
+  }, [savedWorkouts]);
+
+  useEffect(function () {
     localStorage.setItem("workoutEntries", JSON.stringify(workoutEntries));
   }, [workoutEntries]);
 
@@ -227,10 +237,13 @@ export default function App() {
     weightHistory,
     foodEntries,
     workoutEntries,
+    savedFoods,
+    savedWorkouts,
     isSignedIn,
     autoBackupEnabled,
   ]);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(function () {
     if (!selectedFoodBase) return;
 
@@ -263,6 +276,7 @@ export default function App() {
 
     setWorkoutCalories(String(calories));
   }, [selectedActivity, activityIntensity, activityDuration, bodyWeightLbs]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   async function signIn() {
     if (!instance) {
@@ -326,29 +340,6 @@ export default function App() {
     });
   }
 
-  async function testGraph() {
-    try {
-      setStatus("Testing Microsoft Graph...");
-
-      const response = await graphFetch(GRAPH_BASE + "/me");
-
-      if (!response.ok) {
-        throw new Error("Graph test failed: " + response.status);
-      }
-
-      const data = await response.json();
-
-      setStatus(
-        "Graph connected. Hello, " +
-        (data.displayName || data.userPrincipalName || "Microsoft user") +
-        "!"
-      );
-    } catch (error) {
-      console.error(error);
-      setStatus("Graph test failed. Check the console.");
-    }
-  }
-
   async function backupToOneDrive(isAuto) {
     try {
       if (!isSignedIn) return;
@@ -368,6 +359,7 @@ export default function App() {
   workoutEntries: workoutEntries,
 
   savedFoods: savedFoods,
+  savedWorkouts: savedWorkouts,
 
   lastUpdated: new Date().toISOString(),
 };
@@ -437,6 +429,12 @@ export default function App() {
 setSavedFoods(
   Array.isArray(backup.savedFoods)
     ? backup.savedFoods
+    : []
+);
+
+setSavedWorkouts(
+  Array.isArray(backup.savedWorkouts)
+    ? backup.savedWorkouts
     : []
 );
 
@@ -697,6 +695,37 @@ function selectActivity(activity) {
   }
 }
 
+  function saveWorkoutTemplate() {
+    if (!workoutName || !workoutCalories) return;
+
+    const exists = savedWorkouts.some(function (workout) {
+      return workout.name.toLowerCase() === workoutName.toLowerCase();
+    });
+
+    if (exists) {
+      alert("Workout already exists in My Workouts");
+      return;
+    }
+
+    const workout = {
+      id: Date.now(),
+      name: workoutName,
+      calories: Number(workoutCalories),
+      intensity: activityIntensity,
+      duration: Number(activityDuration || 0),
+    };
+
+    setSavedWorkouts([workout].concat(savedWorkouts));
+  }
+
+  function loadSavedWorkout(workout) {
+    setWorkoutName(workout.name);
+    setWorkoutCalories(String(workout.calories));
+    setActivityIntensity(workout.intensity || "moderate");
+    setActivityDuration(workout.duration || 30);
+    setSelectedActivity(null);
+  }
+
   function addFood() {
   if (!foodName || !foodCalories) return;
 
@@ -763,6 +792,14 @@ setActivitySearchStatus("");
     })
   );
 }
+
+    function deleteSavedWorkout(id) {
+      setSavedWorkouts(
+        savedWorkouts.filter(function (workout) {
+          return workout.id !== id;
+        })
+      );
+    }
 
     function deleteWorkout(id) {
       setWorkoutEntries(
@@ -1064,13 +1101,6 @@ const mostUsedFoods = Object.values(foodUsageMap)
 
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 <button
-                  onClick={testGraph}
-                  className="rounded-xl bg-slate-800 px-4 py-3 font-bold text-white"
-                >
-                  Test Graph Connection
-                </button>
-
-                <button
                   onClick={function () {
                     backupToOneDrive(false);
                   }}
@@ -1131,7 +1161,22 @@ const mostUsedFoods = Object.values(foodUsageMap)
             </section>
           )}
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <button
+            onClick={function () {
+              setActiveScreen(
+                activeScreen === "tracker" ? "dashboard" : "tracker"
+              );
+            }}
+            className="w-full rounded-xl bg-slate-800 px-4 py-3 font-bold text-white"
+          >
+            {activeScreen === "tracker"
+              ? "Open Nutrition Dashboard"
+              : "Back to Tracker"}
+          </button>
+
+          {activeScreen === "tracker" && (
+            <div>
+            <div className="grid gap-4 sm:grid-cols-2">
             <section
               className={
                 "rounded-2xl bg-white p-4 shadow-sm " +
@@ -1309,13 +1354,13 @@ const mostUsedFoods = Object.values(foodUsageMap)
                 </div>
               </div>
 
-              <div className="mt-5">
-                <h3 className="font-semibold">
+              <details className="mt-5 rounded-xl border p-3">
+                <summary className="cursor-pointer font-semibold">
                   My Foods
-                </h3>
+                </summary>
 
                 {savedFoods.length === 0 ? (
-                  <p className="mt-2 text-sm text-slate-500">
+                  <p className="mt-3 text-sm text-slate-500">
                     No saved foods yet.
                   </p>
                 ) : (
@@ -1352,15 +1397,15 @@ const mostUsedFoods = Object.values(foodUsageMap)
 
                   </div>
                 )}
-              </div>
+              </details>
 
-<div className="mt-5">
-  <h3 className="font-semibold">
+<details className="mt-5 rounded-xl border p-3">
+  <summary className="cursor-pointer font-semibold">
     Recent Foods
-  </h3>
+  </summary>
 
   {recentFoodsList.length === 0 ? (
-    <p className="mt-2 text-sm text-slate-500">
+    <p className="mt-3 text-sm text-slate-500">
       No recent foods yet.
     </p>
   ) : (
@@ -1382,15 +1427,15 @@ const mostUsedFoods = Object.values(foodUsageMap)
       ))}
     </div>
   )}
-</div>
+</details>
 
-<div className="mt-5">
-  <h3 className="font-semibold">
+<details className="mt-5 rounded-xl border p-3">
+  <summary className="cursor-pointer font-semibold">
     Most Used Foods
-  </h3>
+  </summary>
 
   {mostUsedFoods.length === 0 ? (
-    <p className="mt-2 text-sm text-slate-500">
+    <p className="mt-3 text-sm text-slate-500">
       No frequently used foods yet.
     </p>
   ) : (
@@ -1417,7 +1462,7 @@ const mostUsedFoods = Object.values(foodUsageMap)
       ))}
     </div>
   )}
-</div>
+</details>
 
               <LogList
                 title="Food Log"
@@ -1548,12 +1593,63 @@ const mostUsedFoods = Object.values(foodUsageMap)
                   }}
                 />
 
-                <button
-                  onClick={addWorkout}
-                  className="w-full rounded-xl bg-blue-500 px-4 py-3 font-bold text-white"
-                >
-                  Add Workout
-                </button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={addWorkout}
+                    className="rounded-xl bg-blue-500 px-4 py-3 font-bold text-white"
+                  >
+                    Add Workout
+                  </button>
+
+                  <button
+                    onClick={saveWorkoutTemplate}
+                    className="rounded-xl bg-indigo-600 px-4 py-3 font-bold text-white"
+                  >
+                    Save Workout
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <h3 className="font-semibold">My Workouts</h3>
+
+                {savedWorkouts.length === 0 ? (
+                  <p className="mt-2 text-sm text-slate-500">
+                    No saved workouts yet.
+                  </p>
+                ) : (
+                  <div className="mt-3 space-y-2">
+                    {savedWorkouts.map(function (workout) {
+                      return (
+                        <div
+                          key={workout.id}
+                          className="flex items-center justify-between rounded-xl border p-3"
+                        >
+                          <button
+                            onClick={function () {
+                              loadSavedWorkout(workout);
+                            }}
+                            className="flex-1 text-left"
+                          >
+                            <p className="font-semibold">{workout.name}</p>
+                            <p className="text-sm text-slate-500">
+                              {workout.calories} cal | {workout.duration || 0} min | {capitalize(workout.intensity || "moderate")}
+                            </p>
+                          </button>
+
+                          <button
+                            onClick={function () {
+                              deleteSavedWorkout(workout.id);
+                            }}
+                            className="ml-3 rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
 <div className="mt-5">
@@ -1662,7 +1758,7 @@ const mostUsedFoods = Object.values(foodUsageMap)
             <SummaryCard label="Burned" value={Math.round(caloriesBurned)} suffix="cal" />
             <SummaryCard label="Net" value={Math.round(netCalories)} suffix="cal" />
             <SummaryCard label="Remaining" value={Math.round(remaining)} suffix="cal" />
-            <SummaryCard label="Weight" value={Math.round(bodyWeightLbs)} suffix="lbs" />
+            <SummaryCard label="Weight" value={roundOne(bodyWeightLbs)} suffix="lbs" />
             <SummaryCard label="Change" value={totalWeightChange} suffix="lbs" />
             <SummaryCard
               label="Goal Diff"
@@ -1832,6 +1928,11 @@ const mostUsedFoods = Object.values(foodUsageMap)
             )}
           </section>
 
+          </div>
+          )}
+
+          {activeScreen === "dashboard" && (
+            <>
           <section className="rounded-2xl bg-white p-4 shadow-sm">
             <h2 className="text-xl font-bold">
               Nutrition Dashboard
@@ -1961,6 +2062,8 @@ const mostUsedFoods = Object.values(foodUsageMap)
               </ResponsiveContainer>
             </div>
           </section>
+            </>
+          )}
 
           <section className="rounded-2xl bg-white p-2 shadow-sm sm:hidden">
             <div className="grid grid-cols-2 gap-2">
@@ -2041,12 +2144,23 @@ const mostUsedFoods = Object.values(foodUsageMap)
   }
 
   function SummaryCard(props) {
+    const valueClassName =
+      props.label === "Remaining"
+        ? Number(props.value) <= 100
+          ? "text-red-600"
+          : Number(props.value) < 500
+            ? "text-yellow-600"
+            : "text-slate-900"
+        : "text-slate-900";
+
     return (
       <div className="rounded-2xl bg-white p-4 shadow-sm">
         <p className="text-xs font-semibold uppercase text-slate-500">
           {props.label}
         </p>
-        <p className="mt-2 text-xl md:text-2xl font-bold text-slate-900">{props.value}</p>
+        <p className={"mt-2 text-xl md:text-2xl font-bold " + valueClassName}>
+          {props.value}
+        </p>
         <p className="text-xs md:text-sm text-slate-400">{props.suffix}</p>
       </div>
     );
