@@ -1171,7 +1171,7 @@ const mostUsedFoods = Object.values(foodUsageMap)
                 activeScreen === "tracker" ? "dashboard" : "tracker"
               );
             }}
-            className="w-full rounded-xl bg-slate-800 px-4 py-3 font-bold text-white"
+            className="w-full rounded-xl bg-sky-200 px-4 py-3 font-bold text-slate-900 hover:bg-sky-300"
           >
             {activeScreen === "tracker"
               ? "Open Nutrition Dashboard"
