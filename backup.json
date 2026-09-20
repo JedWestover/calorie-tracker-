@@ -1,0 +1,1177 @@
+{
+  "app": "Calories Fitness Tracker",
+  "version": 7,
+  "goal": 1800,
+  "bodyWeightLbs": 226,
+  "goalWeight": 170,
+  "weightHistory": [
+    {
+      "id": 1789937606358,
+      "date": "9/20/2026",
+      "weight": 226
+    },
+    {
+      "id": 1789824262104,
+      "date": "9/19/2026",
+      "weight": 226.6
+    },
+    {
+      "id": 1789650570251,
+      "date": "9/17/2026",
+      "weight": 226.3
+    },
+    {
+      "id": 1789477740657,
+      "date": "9/15/2026",
+      "weight": 226.7
+    },
+    {
+      "id": 1789392433228,
+      "date": "9/14/2026",
+      "weight": 225.1
+    },
+    {
+      "id": 1789318059868,
+      "date": "9/13/2026",
+      "weight": 225.3
+    },
+    {
+      "id": 1789235132253,
+      "date": "9/12/2026",
+      "weight": 225
+    },
+    {
+      "id": 1789131960768,
+      "date": "9/11/2026",
+      "weight": 225.8
+    },
+    {
+      "id": 1789041716257,
+      "date": "9/10/2026",
+      "weight": 225.1
+    },
+    {
+      "id": 1788960624385,
+      "date": "9/9/2026",
+      "weight": 224.6
+    },
+    {
+      "id": 1788873441487,
+      "date": "9/8/2026",
+      "weight": 224.5
+    },
+    {
+      "id": 1788798476319,
+      "date": "9/7/2026",
+      "weight": 224.9
+    },
+    {
+      "id": 1788702387873,
+      "date": "9/6/2026",
+      "weight": 227.2
+    },
+    {
+      "id": 1787921322467,
+      "date": "8/28/2026",
+      "weight": 224.4
+    },
+    {
+      "id": 1787836821553,
+      "date": "8/27/2026",
+      "weight": 224.9
+    },
+    {
+      "id": 1787664208249,
+      "date": "8/25/2026",
+      "weight": 223.4
+    },
+    {
+      "id": 1787574970327,
+      "date": "8/24/2026",
+      "weight": 224.4
+    },
+    {
+      "id": 1787233687569,
+      "date": "8/20/2026",
+      "weight": 223.4
+    },
+    {
+      "id": 1787226923139,
+      "date": "8/20/2026",
+      "weight": 223.7
+    },
+    {
+      "id": 1787106475626,
+      "date": "8/18/2026",
+      "weight": 223
+    }
+  ],
+  "foodEntries": [
+    {
+      "id": 1787192527868,
+      "date": "2026-08-19",
+      "name": "CHICK-FIL-A, chicken sandwich",
+      "calories": 249,
+      "protein": 16.3,
+      "carbs": 20.9,
+      "fat": 11.2,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787192541500,
+      "date": "2026-08-19",
+      "name": "McDONALD'S, Hash Brown",
+      "calories": 271,
+      "protein": 2.5,
+      "carbs": 28.6,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787192572565,
+      "date": "2026-08-19",
+      "name": "McDONALD'S, Bacon Egg & Cheese Biscuit",
+      "calories": 304,
+      "protein": 13.4,
+      "carbs": 22.3,
+      "fat": 18.8,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787192634104,
+      "date": "2026-08-19",
+      "name": "Buffalo Wild Wings, 15",
+      "calories": 1100,
+      "protein": 150,
+      "carbs": 0,
+      "fat": 61,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787192705509,
+      "date": "2026-08-19",
+      "name": "Candies, MARS SNACKFOOD US, M&M's Peanut Chocolate Candies",
+      "calories": 258,
+      "protein": 4.8,
+      "carbs": 30.3,
+      "fat": 4.1,
+      "servingMultiplier": 0.5
+    },
+    {
+      "id": 1787192750990,
+      "date": "2026-08-19",
+      "name": "Multigrain chips (Sun Chips)",
+      "calories": 491,
+      "protein": 8,
+      "carbs": 67.3,
+      "fat": 21.1,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787232009542,
+      "date": "2026-08-20",
+      "name": "McDONALD'S, Hash Brown",
+      "calories": 271,
+      "protein": 2.5,
+      "carbs": 28.6,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787232072885,
+      "date": "2026-08-20",
+      "name": "Sausage, egg and cheese breakfast biscuit",
+      "calories": 324,
+      "protein": 9.5,
+      "carbs": 21.6,
+      "fat": 22.1,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787255881700,
+      "date": "2026-08-20",
+      "name": "Billy Club",
+      "calories": 810,
+      "protein": 50,
+      "carbs": 73,
+      "fat": 32,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787258818941,
+      "date": "2026-08-20",
+      "name": "Candies, MARS SNACKFOOD US, M&M's Peanut Chocolate Candies",
+      "calories": 258,
+      "protein": 4.8,
+      "carbs": 30.3,
+      "fat": 4.1,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787514197379,
+      "date": "2026-08-23",
+      "name": "HOT POCKETS, meatballs & mozzarella stuffed sandwich, frozen",
+      "calories": 504,
+      "protein": 18.6,
+      "carbs": 61.4,
+      "fat": 0.4,
+      "servingMultiplier": 2
+    },
+    {
+      "id": 1787527055207,
+      "date": "2026-08-23",
+      "name": "Domino’s Cheese Pizza",
+      "calories": 290,
+      "protein": 12,
+      "carbs": 34,
+      "fat": 9,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787527089763,
+      "date": "2026-08-23",
+      "name": "Domino’s Cheese Pizza",
+      "calories": 290,
+      "protein": 12,
+      "carbs": 34,
+      "fat": 9,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787527199941,
+      "date": "2026-08-23",
+      "name": "Fritos Honey BBQ Twist ",
+      "calories": 160,
+      "protein": 2,
+      "carbs": 16,
+      "fat": 9,
+      "servingMultiplier": 3
+    },
+    {
+      "id": 1787576857151,
+      "date": "2026-08-24",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787576858957,
+      "date": "2026-08-24",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787590621066,
+      "date": "2026-08-24",
+      "name": "Doritos snack size",
+      "calories": 150,
+      "protein": 2,
+      "carbs": 17,
+      "fat": 8,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787597228432,
+      "date": "2026-08-24",
+      "name": "Tyson Chicken Nuggets (10ea)",
+      "calories": 420,
+      "protein": 22,
+      "carbs": 24,
+      "fat": 26,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787598089281,
+      "date": "2026-08-24",
+      "name": "SARGENTO, STRING CHEESE SNACKS",
+      "calories": 584,
+      "protein": 50,
+      "carbs": 8.4,
+      "fat": 37.6,
+      "servingMultiplier": 2
+    },
+    {
+      "id": 1787621051338,
+      "date": "2026-08-24",
+      "name": "Beef, pot roast",
+      "calories": 251,
+      "protein": 28.4,
+      "carbs": 0,
+      "fat": 15.4,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787621078220,
+      "date": "2026-08-24",
+      "name": "Carrots, cooked, as ingredient",
+      "calories": 50,
+      "protein": 1,
+      "carbs": 10.7,
+      "fat": 0.4,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787621133153,
+      "date": "2026-08-24",
+      "name": "MASHED POTATO",
+      "calories": 103,
+      "protein": 2.3,
+      "carbs": 16.6,
+      "fat": 3.2,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787621166616,
+      "date": "2026-08-24",
+      "name": "Candies, MARS SNACKFOOD US, M&M's Peanut Chocolate Candies",
+      "calories": 258,
+      "protein": 4.8,
+      "carbs": 30.3,
+      "fat": 4.1,
+      "servingMultiplier": 2
+    },
+    {
+      "id": 1787694402177,
+      "date": "2026-08-25",
+      "name": "Billy Club",
+      "calories": 810,
+      "protein": 50,
+      "carbs": 73,
+      "fat": 32,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787694461076,
+      "date": "2026-08-25",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787694463628,
+      "date": "2026-08-25",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787703681413,
+      "date": "2026-08-25",
+      "name": "Cafe Rio Chicken Quesadilla ",
+      "calories": 790,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787805752379,
+      "date": "2026-08-26",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787805801155,
+      "date": "2026-08-26",
+      "name": "Pizza",
+      "calories": 1000,
+      "protein": 52,
+      "carbs": 79,
+      "fat": 53,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787805838663,
+      "date": "2026-08-26",
+      "name": "McDONALD'S, french fries",
+      "calories": 1350,
+      "protein": 3.4,
+      "carbs": 42.6,
+      "fat": 0.1,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787805876466,
+      "date": "2026-08-26",
+      "name": "Restaurant, Italian, spaghetti with meat sauce",
+      "calories": 121,
+      "protein": 5.8,
+      "carbs": 16.4,
+      "fat": 3.6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787864103121,
+      "date": "2026-08-27",
+      "name": "McDONALD'S, Hash Brown",
+      "calories": 271,
+      "protein": 2.5,
+      "carbs": 28.6,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787864119573,
+      "date": "2026-08-27",
+      "name": "Sausage, egg and cheese breakfast biscuit",
+      "calories": 324,
+      "protein": 9.5,
+      "carbs": 21.6,
+      "fat": 22.1,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787864192945,
+      "date": "2026-08-27",
+      "name": "Restaurant, Italian, spaghetti with meat sauce",
+      "calories": 121,
+      "protein": 5.8,
+      "carbs": 16.4,
+      "fat": 3.6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787864199234,
+      "date": "2026-08-27",
+      "name": "Restaurant, Italian, spaghetti with meat sauce",
+      "calories": 121,
+      "protein": 5.8,
+      "carbs": 16.4,
+      "fat": 3.6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787864289909,
+      "date": "2026-08-27",
+      "name": "Baby Bell Cheese",
+      "calories": 70,
+      "protein": 5,
+      "carbs": 0,
+      "fat": 5,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1787923406126,
+      "date": "2026-08-28",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788703027845,
+      "date": "2026-09-06",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788716437326,
+      "date": "2026-09-06",
+      "name": "CHOCOLATE CHIP COOKIE",
+      "calories": 228,
+      "protein": 9.1,
+      "carbs": 21.2,
+      "fat": 16.7,
+      "servingMultiplier": 0.5
+    },
+    {
+      "id": 1788729654860,
+      "date": "2026-09-06",
+      "name": "Dominos Pepperoni",
+      "calories": 310,
+      "protein": 14,
+      "carbs": 34,
+      "fat": 13,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788729709497,
+      "date": "2026-09-06",
+      "name": "Dominos Cheese",
+      "calories": 270,
+      "protein": 12,
+      "carbs": 34,
+      "fat": 9,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788752704943,
+      "date": "2026-09-06",
+      "name": "Chicken fillet, grilled",
+      "calories": 151,
+      "protein": 22.3,
+      "carbs": 2.4,
+      "fat": 5.8,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788752723284,
+      "date": "2026-09-06",
+      "name": "GREEN BEANS",
+      "calories": 17,
+      "protein": 0.8,
+      "carbs": 3.3,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788752743257,
+      "date": "2026-09-06",
+      "name": "BAKLAVA",
+      "calories": 514,
+      "protein": 5.4,
+      "carbs": 37.8,
+      "fat": 40.5,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788752792943,
+      "date": "2026-09-06",
+      "name": "Funeral potatoes ",
+      "calories": 240,
+      "protein": 4,
+      "carbs": 44,
+      "fat": 6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788797813047,
+      "date": "2026-09-07",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788813413301,
+      "date": "2026-09-07",
+      "name": "Sonic Double Smash",
+      "calories": 610,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788813434872,
+      "date": "2026-09-07",
+      "name": "Sonic Med Fries",
+      "calories": 370,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788827767223,
+      "date": "2026-09-07",
+      "name": "White rice 1 cup",
+      "calories": 205,
+      "protein": 3.8,
+      "carbs": 44,
+      "fat": 0.3,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788827856396,
+      "date": "2026-09-07",
+      "name": "Chicken Stuff",
+      "calories": 429,
+      "protein": 18,
+      "carbs": 7,
+      "fat": 24,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788839731586,
+      "date": "2026-09-07",
+      "name": "Sam’s Club banana nut muffin",
+      "calories": 640,
+      "protein": 8,
+      "carbs": 78,
+      "fat": 33,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788893250499,
+      "date": "2026-09-08",
+      "name": "Classic lays",
+      "calories": 160,
+      "protein": 2,
+      "carbs": 15,
+      "fat": 10,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788893261408,
+      "date": "2026-09-08",
+      "name": "Chicken Stuff",
+      "calories": 429,
+      "protein": 18,
+      "carbs": 7,
+      "fat": 24,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788893269445,
+      "date": "2026-09-08",
+      "name": "White rice 1 cup",
+      "calories": 205,
+      "protein": 3.8,
+      "carbs": 44,
+      "fat": 0.3,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788893328752,
+      "date": "2026-09-08",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788905725754,
+      "date": "2026-09-08",
+      "name": "BAKLAVA",
+      "calories": 514,
+      "protein": 5.4,
+      "carbs": 37.8,
+      "fat": 40.5,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788923616153,
+      "date": "2026-09-08",
+      "name": "Chicken and rice fajita",
+      "calories": 1500,
+      "protein": 105,
+      "carbs": 135,
+      "fat": 36,
+      "servingMultiplier": 3
+    },
+    {
+      "id": 1788970673120,
+      "date": "2026-09-09",
+      "name": "Doritos snack size",
+      "calories": 150,
+      "protein": 2,
+      "carbs": 17,
+      "fat": 8,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788973633250,
+      "date": "2026-09-09",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788979889168,
+      "date": "2026-09-09",
+      "name": "Fajita (2)",
+      "calories": 440,
+      "protein": 20,
+      "carbs": 18,
+      "fat": 6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1788980426540,
+      "date": "2026-09-09",
+      "name": "String cheese",
+      "calories": 160,
+      "protein": 12,
+      "carbs": 2,
+      "fat": 10,
+      "servingMultiplier": 2
+    },
+    {
+      "id": 1788989592022,
+      "date": "2026-09-09",
+      "name": "Peanuts",
+      "calories": 270,
+      "protein": 12,
+      "carbs": 8,
+      "fat": 24,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789001237217,
+      "date": "2026-09-09",
+      "name": "Panda Chow Mein",
+      "calories": 510,
+      "protein": 25,
+      "carbs": 80,
+      "fat": 22,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789001297713,
+      "date": "2026-09-09",
+      "name": "Orange Chicken x 2",
+      "calories": 980,
+      "protein": 23,
+      "carbs": 102,
+      "fat": 46,
+      "servingMultiplier": 2
+    },
+    {
+      "id": 1789060582074,
+      "date": "2026-09-10",
+      "name": "Fajita (2)",
+      "calories": 440,
+      "protein": 20,
+      "carbs": 18,
+      "fat": 6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789067422913,
+      "date": "2026-09-10",
+      "name": "Diablo Shrimp Pasta (Oregano’s)",
+      "calories": 1300,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789099703178,
+      "date": "2026-09-10",
+      "name": "Fajita (2)",
+      "calories": 440,
+      "protein": 20,
+      "carbs": 18,
+      "fat": 6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789133716643,
+      "date": "2026-09-11",
+      "name": "CHICK-FIL-A, chicken sandwich",
+      "calories": 460,
+      "protein": 16.3,
+      "carbs": 20.9,
+      "fat": 11.2,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789133748176,
+      "date": "2026-09-11",
+      "name": "CHICK-FIL-A, hash browns",
+      "calories": 270,
+      "protein": 3,
+      "carbs": 30.5,
+      "fat": 18.5,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789144766723,
+      "date": "2026-09-11",
+      "name": "Doritos snack size",
+      "calories": 150,
+      "protein": 2,
+      "carbs": 17,
+      "fat": 8,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789195332601,
+      "date": "2026-09-11",
+      "name": "Wendy’s JR bacon cheeseburger ",
+      "calories": 380,
+      "protein": 19,
+      "carbs": 26,
+      "fat": 22,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789195436170,
+      "date": "2026-09-11",
+      "name": "Wendy’s small fries",
+      "calories": 260,
+      "protein": 4,
+      "carbs": 35,
+      "fat": 12,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789195524347,
+      "date": "2026-09-11",
+      "name": "Wendy’s 4pcs nuggets ",
+      "calories": 170,
+      "protein": 9,
+      "carbs": 10,
+      "fat": 10,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789195623015,
+      "date": "2026-09-11",
+      "name": "Jimmy John’s Roast Beef",
+      "calories": 500,
+      "protein": 26,
+      "carbs": 47,
+      "fat": 7,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789195733032,
+      "date": "2026-09-11",
+      "name": "Red Robin Mushroom Swiss",
+      "calories": 700,
+      "protein": 48,
+      "carbs": 53,
+      "fat": 40,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789195889473,
+      "date": "2026-09-11",
+      "name": "Red Robin Was noon Rings",
+      "calories": 210,
+      "protein": 3,
+      "carbs": 25,
+      "fat": 12.5,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789235124068,
+      "date": "2026-09-12",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789249272828,
+      "date": "2026-09-12",
+      "name": "Chicken Ramen",
+      "calories": 380,
+      "protein": 9,
+      "carbs": 53,
+      "fat": 14,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789249282550,
+      "date": "2026-09-12",
+      "name": "Chicken Ramen",
+      "calories": 380,
+      "protein": 9,
+      "carbs": 53,
+      "fat": 14,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789277385073,
+      "date": "2026-09-12",
+      "name": "Pot Roast",
+      "calories": 70,
+      "protein": 8,
+      "carbs": 0,
+      "fat": 4,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789277449742,
+      "date": "2026-09-12",
+      "name": "Mashed potatoes",
+      "calories": 130,
+      "protein": 3,
+      "carbs": 20,
+      "fat": 6,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789277495454,
+      "date": "2026-09-12",
+      "name": "Brown gravy",
+      "calories": 30,
+      "protein": 1,
+      "carbs": 4,
+      "fat": 2,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789277591281,
+      "date": "2026-09-12",
+      "name": "Ceasar salad",
+      "calories": 350,
+      "protein": 8,
+      "carbs": 18,
+      "fat": 28,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789318051680,
+      "date": "2026-09-13",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789320270496,
+      "date": "2026-09-13",
+      "name": "Corn dogs, frozen, prepared",
+      "calories": 230,
+      "protein": 8.6,
+      "carbs": 27,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789348629417,
+      "date": "2026-09-13",
+      "name": "Beef and bean burrito ",
+      "calories": 460,
+      "protein": 28,
+      "carbs": 47,
+      "fat": 18,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789348657988,
+      "date": "2026-09-13",
+      "name": "SHREDDED CHEDDAR CHEESE",
+      "calories": 393,
+      "protein": 21.4,
+      "carbs": 3.6,
+      "fat": 32.1,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789348750649,
+      "date": "2026-09-13",
+      "name": "Beef and bean taco",
+      "calories": 200,
+      "protein": 14,
+      "carbs": 24,
+      "fat": 9,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789348781290,
+      "date": "2026-09-13",
+      "name": "CHOCOLATE CHIP COOKIE",
+      "calories": 455,
+      "protein": 18.2,
+      "carbs": 42.4,
+      "fat": 33.3,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789355748975,
+      "date": "2026-09-13",
+      "name": "Balance",
+      "calories": 1137,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789663507429,
+      "date": "2026-09-17",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789675607703,
+      "date": "2026-09-17",
+      "name": "Billy Club",
+      "calories": 810,
+      "protein": 50,
+      "carbs": 73,
+      "fat": 32,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789675636630,
+      "date": "2026-09-17",
+      "name": "Cookie",
+      "calories": 410,
+      "protein": 5,
+      "carbs": 56,
+      "fat": 20,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789690811931,
+      "date": "2026-09-17",
+      "name": "Buldak Spicy Chicken Ramen",
+      "calories": 560,
+      "protein": 14,
+      "carbs": 86,
+      "fat": 8,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789780311624,
+      "date": "2026-09-18",
+      "name": "CHICK-FIL-A, chicken sandwich",
+      "calories": 249,
+      "protein": 16.3,
+      "carbs": 20.9,
+      "fat": 11.2,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789824256294,
+      "date": "2026-09-19",
+      "name": "HOT POCKETS, Pepperoni Pizza",
+      "calories": 330,
+      "protein": 10,
+      "carbs": 29,
+      "fat": 15,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789937596717,
+      "date": "2026-09-20",
+      "name": "Buldak Spicy Chicken Ramen",
+      "calories": 560,
+      "protein": 14,
+      "carbs": 86,
+      "fat": 8,
+      "servingMultiplier": 1
+    },
+    {
+      "id": 1789944021492,
+      "date": "2026-09-20",
+      "name": "Cheese bagel - Chompy's ",
+      "calories": 220,
+      "protein": 8,
+      "carbs": 30,
+      "fat": 4,
+      "servingMultiplier": 1
+    }
+  ],
+  "workoutEntries": [
+    {
+      "id": 1787192784687,
+      "name": "Walking - Light - 20 min",
+      "calories": 99,
+      "intensity": "light",
+      "duration": 20,
+      "bodyWeightLbs": 223,
+      "date": "2026-08-22"
+    },
+    {
+      "id": 1787267090976,
+      "name": "PT",
+      "calories": 222,
+      "intensity": "moderate",
+      "duration": 30,
+      "bodyWeightLbs": 223.4,
+      "date": "2026-08-22"
+    },
+    {
+      "id": 1787527306844,
+      "date": "2026-08-23",
+      "name": "Strength Training - Light - 120 min",
+      "calories": 638,
+      "intensity": "light",
+      "duration": 120,
+      "bodyWeightLbs": 223.4
+    },
+    {
+      "id": 1787590697071,
+      "date": "2026-08-24",
+      "name": "Warehouse 10:00am",
+      "calories": 220,
+      "intensity": "moderate",
+      "duration": 30,
+      "bodyWeightLbs": 224.4
+    },
+    {
+      "id": 1788729750614,
+      "date": "2026-09-06",
+      "name": "Sunday drums",
+      "calories": 900,
+      "intensity": "moderate",
+      "duration": 30,
+      "bodyWeightLbs": 227.2
+    },
+    {
+      "id": 1788813568890,
+      "date": "2026-09-07",
+      "name": "Walking - Light - 60 min",
+      "calories": 300,
+      "intensity": "light",
+      "duration": 60,
+      "bodyWeightLbs": 224.9
+    },
+    {
+      "id": 1788923661827,
+      "date": "2026-09-08",
+      "name": "Walking - Light - 20 min",
+      "calories": 99,
+      "intensity": "light",
+      "duration": 20,
+      "bodyWeightLbs": 224.5
+    },
+    {
+      "id": 1789318114510,
+      "date": "2026-09-13",
+      "name": "Drum practice ",
+      "calories": 175,
+      "intensity": "moderate",
+      "duration": 30,
+      "bodyWeightLbs": 225.3
+    },
+    {
+      "id": 1789348530641,
+      "date": "2026-09-13",
+      "name": "Drums",
+      "calories": 1230,
+      "intensity": "moderate",
+      "duration": 30,
+      "bodyWeightLbs": 225.3
+    }
+  ],
+  "savedFoods": [],
+  "savedWorkouts": [],
+  "lastUpdated": "2026-09-20T22:41:07.330Z"
+}
