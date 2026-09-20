@@ -150,6 +150,10 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState("food");
   const [activeScreen, setActiveScreen] = useState("tracker");
+  const [isDailyHistoryOpen, setIsDailyHistoryOpen] = useState(false);
+  const [isWeightHistoryOpen, setIsWeightHistoryOpen] = useState(false);
+  const [isRecentWorkoutsOpen, setIsRecentWorkoutsOpen] = useState(false);
+  const [isSavedWorkoutsOpen, setIsSavedWorkoutsOpen] = useState(false);
   const [status, setStatus] = useState("");
   const [autoBackupEnabled, setAutoBackupEnabled] = useState(true);
   const [autoRestoreEnabled, setAutoRestoreEnabled] = useState(true);
@@ -1302,12 +1306,12 @@ const mostUsedFoods = Object.values(foodUsageMap)
                 <div className="grid grid-cols-3 gap-2">
                   <input
                     className="rounded-xl border px-3 py-3"
-                    placeholder="Protein"
+                    placeholder="Fat"
                     type="number"
                     inputMode="decimal"
-                    value={foodProtein}
+                    value={foodFat}
                     onChange={function (event) {
-                      setFoodProtein(event.target.value);
+                      setFoodFat(event.target.value);
                       setSelectedFoodBase(null);
                     }}
                   />
@@ -1326,12 +1330,12 @@ const mostUsedFoods = Object.values(foodUsageMap)
 
                   <input
                     className="rounded-xl border px-3 py-3"
-                    placeholder="Fat"
+                    placeholder="Protein"
                     type="number"
                     inputMode="decimal"
-                    value={foodFat}
+                    value={foodProtein}
                     onChange={function (event) {
-                      setFoodFat(event.target.value);
+                      setFoodProtein(event.target.value);
                       setSelectedFoodBase(null);
                     }}
                   />
@@ -1611,81 +1615,121 @@ const mostUsedFoods = Object.values(foodUsageMap)
               </div>
 
               <div className="mt-5">
-                <h3 className="font-semibold">My Workouts</h3>
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between gap-3 text-left"
+                  aria-expanded={isSavedWorkoutsOpen}
+                  onClick={() => {
+                    setIsSavedWorkoutsOpen(!isSavedWorkoutsOpen);
+                  }}
+                >
+                  <h3 className="font-semibold">My Workouts</h3>
+                  <span
+                    className={
+                      "text-slate-500 transition-transform " +
+                      (isSavedWorkoutsOpen ? "rotate-180" : "")
+                    }
+                    aria-hidden="true"
+                  >
+                    &#9662;
+                  </span>
+                </button>
 
-                {savedWorkouts.length === 0 ? (
-                  <p className="mt-2 text-sm text-slate-500">
-                    No saved workouts yet.
-                  </p>
-                ) : (
-                  <div className="mt-3 space-y-2">
-                    {savedWorkouts.map(function (workout) {
-                      return (
-                        <div
-                          key={workout.id}
-                          className="flex items-center justify-between rounded-xl border p-3"
-                        >
-                          <button
-                            onClick={function () {
-                              loadSavedWorkout(workout);
-                            }}
-                            className="flex-1 text-left"
+                {isSavedWorkoutsOpen && (
+                  savedWorkouts.length === 0 ? (
+                    <p className="mt-2 text-sm text-slate-500">
+                      No saved workouts yet.
+                    </p>
+                  ) : (
+                    <div className="mt-3 space-y-2">
+                      {savedWorkouts.map(function (workout) {
+                        return (
+                          <div
+                            key={workout.id}
+                            className="flex items-center justify-between rounded-xl border p-3"
                           >
-                            <p className="font-semibold">{workout.name}</p>
-                            <p className="text-sm text-slate-500">
-                              {workout.calories} cal | {workout.duration || 0} min | {capitalize(workout.intensity || "moderate")}
-                            </p>
-                          </button>
+                            <button
+                              onClick={function () {
+                                loadSavedWorkout(workout);
+                              }}
+                              className="flex-1 text-left"
+                            >
+                              <p className="font-semibold">{workout.name}</p>
+                              <p className="text-sm text-slate-500">
+                                {workout.calories} cal | {workout.duration || 0} min | {capitalize(workout.intensity || "moderate")}
+                              </p>
+                            </button>
 
-                          <button
-                            onClick={function () {
-                              deleteSavedWorkout(workout.id);
-                            }}
-                            className="ml-3 rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
+                            <button
+                              onClick={function () {
+                                deleteSavedWorkout(workout.id);
+                              }}
+                              className="ml-3 rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )
                 )}
               </div>
 
 <div className="mt-5">
-  <h3 className="font-semibold">
-    Recent Workouts
-  </h3>
+  <button
+    type="button"
+    className="flex w-full items-center justify-between gap-3 text-left"
+    aria-expanded={isRecentWorkoutsOpen}
+    onClick={() => {
+      setIsRecentWorkoutsOpen(!isRecentWorkoutsOpen);
+    }}
+  >
+    <h3 className="font-semibold">
+      Recent Workouts
+    </h3>
+    <span
+      className={
+        "text-slate-500 transition-transform " +
+        (isRecentWorkoutsOpen ? "rotate-180" : "")
+      }
+      aria-hidden="true"
+    >
+      &#9662;
+    </span>
+  </button>
 
-  {recentWorkoutsList.length === 0 ? (
-    <p className="mt-2 text-sm text-slate-500">
-      No recent workouts yet.
-    </p>
-  ) : (
-    <div className="mt-3 space-y-2">
-      {recentWorkoutsList.map((workout) => (
-        <button
-          key={workout.id}
-          onClick={() =>
-            loadRecentWorkout(workout)
-          }
-          className="w-full rounded-xl border p-3 text-left hover:bg-blue-50"
-        >
-          <p className="font-semibold">
-            {workout.name}
-          </p>
+  {isRecentWorkoutsOpen && (
+    recentWorkoutsList.length === 0 ? (
+      <p className="mt-2 text-sm text-slate-500">
+        No recent workouts yet.
+      </p>
+    ) : (
+      <div className="mt-3 space-y-2">
+        {recentWorkoutsList.map((workout) => (
+          <button
+            key={workout.id}
+            onClick={() =>
+              loadRecentWorkout(workout)
+            }
+            className="w-full rounded-xl border p-3 text-left hover:bg-blue-50"
+          >
+            <p className="font-semibold">
+              {workout.name}
+            </p>
 
-          <p className="text-sm text-slate-500">
-            {workout.calories} cal burned
-          </p>
+            <p className="text-sm text-slate-500">
+              {workout.calories} cal burned
+            </p>
 
-          <p className="text-xs text-slate-400">
-            {workout.intensity || "manual"} |{" "}
-            {workout.duration || 0} min
-          </p>
-        </button>
-      ))}
-    </div>
+            <p className="text-xs text-slate-400">
+              {workout.intensity || "manual"} |{" "}
+              {workout.duration || 0} min
+            </p>
+          </button>
+        ))}
+      </div>
+    )
   )}
 </div>
 
@@ -1808,123 +1852,163 @@ const mostUsedFoods = Object.values(foodUsageMap)
           </section>
 
           <section className="rounded-2xl bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between gap-3">
+            <button
+              type="button"
+              className="flex w-full items-center justify-between gap-3 text-left"
+              aria-expanded={isDailyHistoryOpen}
+              onClick={() => {
+                setIsDailyHistoryOpen(!isDailyHistoryOpen);
+              }}
+            >
               <div>
                 <h2 className="text-xl font-bold">Daily History</h2>
                 <p className="text-sm text-slate-500">
                   Today, {todayKey}, is shown in the active logs above.
                 </p>
               </div>
-              <p className="text-sm font-semibold text-emerald-600">
-                {todayFoodEntries.length + todayWorkoutEntries.length} today
-              </p>
-            </div>
-
-            {previousDays.length === 0 ? (
-              <p className="mt-4 text-sm text-slate-500">
-                Previous days will appear here after you log another day.
-              </p>
-            ) : (
-              <div className="mt-4 space-y-2">
-                {previousDays.map(function (day) {
-                  return (
-                    <div
-                      key={day.date}
-                      className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3"
-                    >
-                      <p className="font-semibold">{day.date}</p>
-                      <p className="text-sm text-slate-600">
-                        {Math.round(day.consumed)} consumed | {Math.round(day.burned)} burned | Net {Math.round(day.consumed - day.burned)} cal
-                      </p>
-                    </div>
-                  );
-                })}
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-emerald-600">
+                  {todayFoodEntries.length + todayWorkoutEntries.length} today
+                </p>
+                <span
+                  className={
+                    "text-slate-500 transition-transform " +
+                    (isDailyHistoryOpen ? "rotate-180" : "")
+                  }
+                  aria-hidden="true"
+                >
+                  &#9662;
+                </span>
               </div>
+            </button>
+
+            {isDailyHistoryOpen && (
+              previousDays.length === 0 ? (
+                <p className="mt-4 text-sm text-slate-500">
+                  Previous days will appear here after you log another day.
+                </p>
+              ) : (
+                <div className="mt-4 space-y-2">
+                  {previousDays.map(function (day) {
+                    return (
+                      <div
+                        key={day.date}
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3"
+                      >
+                        <p className="font-semibold">{day.date}</p>
+                        <p className="text-sm text-slate-600">
+                          {Math.round(day.consumed)} consumed | {Math.round(day.burned)} burned | Net {Math.round(day.consumed - day.burned)} cal
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )
             )}
           </section>
 
           <section className="rounded-2xl bg-white p-4 shadow-sm">
-            <h2 className="text-xl font-bold">
-              Weight Progress
-            </h2>
+            <button
+              type="button"
+              className="flex w-full items-center justify-between gap-3 text-left"
+              aria-expanded={isWeightHistoryOpen}
+              onClick={() => {
+                setIsWeightHistoryOpen(!isWeightHistoryOpen);
+              }}
+            >
+              <h2 className="text-xl font-bold">
+                Weight Progress
+              </h2>
+              <span
+                className={
+                  "text-slate-500 transition-transform " +
+                  (isWeightHistoryOpen ? "rotate-180" : "")
+                }
+                aria-hidden="true"
+              >
+                &#9662;
+              </span>
+            </button>
 
-            {weightHistory.length === 0 ? (
-              <p className="mt-3 text-slate-500">
-                No weight entries yet.
-              </p>
-            ) : (
-              <>
-                <div className="mt-4 h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={weightChartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
+            {isWeightHistoryOpen && (
+              weightHistory.length === 0 ? (
+                <p className="mt-3 text-slate-500">
+                  No weight entries yet.
+                </p>
+              ) : (
+                <>
+                  <div className="mt-4 h-72">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={weightChartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
 
-                      <XAxis dataKey="date" />
+                        <XAxis dataKey="date" />
 
-                      <YAxis domain={["auto", "auto"]} />
+                        <YAxis domain={["auto", "auto"]} />
 
-                      <Tooltip />
+                        <Tooltip />
 
-                      <Line
-                        type="monotone"
-                        dataKey="weight"
-                        stroke="#10b981"
-                        strokeWidth={3}
-                        dot={{ r: 4 }}
-                      />
+                        <Line
+                          type="monotone"
+                          dataKey="weight"
+                          stroke="#10b981"
+                          strokeWidth={3}
+                          dot={{ r: 4 }}
+                        />
 
-                      <Line
-                        type="monotone"
-                        dataKey="goal"
-                        stroke="#ef4444"
-                        strokeDasharray="5 5"
-                        strokeWidth={2}
-                      />
+                        <Line
+                          type="monotone"
+                          dataKey="goal"
+                          stroke="#ef4444"
+                          strokeDasharray="5 5"
+                          strokeWidth={2}
+                        />
 
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {estimatedWeeksRemaining && (
-                  <div className="mt-4 rounded-xl bg-green-50 p-4">
-                    <p className="font-semibold text-green-800">
-                      Estimated Goal Time
-                    </p>
-
-                    <p className="mt-1 text-green-700">
-                      Approximately {estimatedWeeksRemaining} weeks remaining.
-                    </p>
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
-                )}
 
-                <div className="mt-4 space-y-2">
-                  {weightHistory.map((entry) => (
-                    <div
-                      key={entry.id}
-                      className="flex items-center justify-between rounded-xl border p-3"
-                    >
-                      <div>
-                        <p className="font-semibold">
-                          {entry.date}
-                        </p>
+                  {estimatedWeeksRemaining && (
+                    <div className="mt-4 rounded-xl bg-green-50 p-4">
+                      <p className="font-semibold text-green-800">
+                        Estimated Goal Time
+                      </p>
 
-                        <p className="text-sm text-slate-500">
-                          {entry.weight} lbs
-                        </p>
-                      </div>
-
-                      <button
-                        onClick={() =>
-                          deleteWeightEntry(entry.id)
-                        }
-                        className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600"
-                      >
-                        Delete
-                      </button>
+                      <p className="mt-1 text-green-700">
+                        Approximately {estimatedWeeksRemaining} weeks remaining.
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </>
+                  )}
+
+                  <div className="mt-4 space-y-2">
+                    {weightHistory.map((entry) => (
+                      <div
+                        key={entry.id}
+                        className="flex items-center justify-between rounded-xl border p-3"
+                      >
+                        <div>
+                          <p className="font-semibold">
+                            {entry.date}
+                          </p>
+
+                          <p className="text-sm text-slate-500">
+                            {entry.weight} lbs
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() =>
+                            deleteWeightEntry(entry.id)
+                          }
+                          className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )
             )}
           </section>
 
