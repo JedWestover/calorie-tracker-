@@ -1470,14 +1470,6 @@
       "fat": 61
     },
     {
-      "id": 1787108855378,
-      "name": "McDONALD'S, Hash Brown",
-      "calories": 271,
-      "protein": 2.5,
-      "carbs": 28.6,
-      "fat": 0
-    },
-    {
       "id": 1787108807017,
       "name": "McDONALD'S, Sausage Biscuit with Egg",
       "calories": 311,
@@ -1519,5 +1511,5 @@
     }
   ],
   "savedWorkouts": [],
-  "lastUpdated": "2026-09-27T20:40:06.851Z"
+  "lastUpdated": "2026-09-27T20:42:09.213Z"
 }

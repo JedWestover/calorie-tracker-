@@ -192,6 +192,43 @@ export default function App() {
   const isSignedIn = accounts.length > 0;
 
   useEffect(function () {
+    const acknowledgementTimers = new Map();
+
+    function acknowledgeButton(event) {
+      if (!(event.target instanceof Element)) return;
+
+      const button = event.target.closest("button:not(:disabled)");
+      if (!button) return;
+
+      const existingTimer = acknowledgementTimers.get(button);
+      if (existingTimer !== undefined) {
+        window.clearTimeout(existingTimer);
+      }
+
+      button.classList.remove("button-acknowledged");
+      void button.offsetWidth;
+      button.classList.add("button-acknowledged");
+
+      const timer = window.setTimeout(function () {
+        button.classList.remove("button-acknowledged");
+        acknowledgementTimers.delete(button);
+      }, 450);
+
+      acknowledgementTimers.set(button, timer);
+    }
+
+    document.addEventListener("click", acknowledgeButton, true);
+
+    return function () {
+      document.removeEventListener("click", acknowledgeButton, true);
+      acknowledgementTimers.forEach(function (timer, button) {
+        window.clearTimeout(timer);
+        button.classList.remove("button-acknowledged");
+      });
+    };
+  }, []);
+
+  useEffect(function () {
     const timer = setInterval(function () {
       setTodayKey(getLocalDateKey(new Date()));
     }, 60000);
@@ -458,12 +495,8 @@ export default function App() {
 
 if (Array.isArray(backup.savedFoods)) {
   setSavedFoods(function (currentFoods) {
-    return isAuto
-      ? mergeSavedFoods(currentFoods, backup.savedFoods)
-      : backup.savedFoods;
+    return mergeSavedFoods(currentFoods, backup.savedFoods);
   });
-} else if (!isAuto) {
-  setSavedFoods([]);
 }
 
 setSavedWorkouts(
@@ -703,7 +736,9 @@ function selectActivity(activity) {
       fat: Number(foodFat || 0),
     };
 
-    setSavedFoods([food].concat(savedFoods));
+    const updatedFoods = [food].concat(savedFoods);
+    localStorage.setItem("savedFoods", JSON.stringify(updatedFoods));
+    setSavedFoods(updatedFoods);
   }
 
   function loadSavedFood(food) {
@@ -820,11 +855,11 @@ setActivitySearchStatus("");
     }
 
     function deleteSavedFood(id) {
-  setSavedFoods(
-    savedFoods.filter(function (food) {
-      return food.id !== id;
-    })
-  );
+      const updatedFoods = savedFoods.filter(function (food) {
+        return food.id !== id;
+      });
+      localStorage.setItem("savedFoods", JSON.stringify(updatedFoods));
+      setSavedFoods(updatedFoods);
 }
 
     function deleteSavedWorkout(id) {
