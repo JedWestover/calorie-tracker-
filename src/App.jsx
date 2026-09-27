@@ -68,6 +68,32 @@ function normalizeEntries(entries) {
   });
 }
 
+function mergeSavedFoods(localFoods, backupFoods) {
+  const merged = localFoods.slice();
+  const names = new Set(
+    localFoods
+      .map(function (food) {
+        return String(food.name || "").trim().toLowerCase();
+      })
+      .filter(Boolean)
+  );
+
+  backupFoods.forEach(function (food) {
+    const name = String(food.name || "").trim().toLowerCase();
+
+    if (name && !names.has(name)) {
+      merged.push(food);
+      names.add(name);
+    } else if (!name && !merged.some(function (savedFood) {
+      return savedFood.id === food.id;
+    })) {
+      merged.push(food);
+    }
+  });
+
+  return merged;
+}
+
 function getOpenFoodFactsCalories(nutriments) {
   return roundOne(
     nutriments["energy-kcal_100g"] ||
@@ -430,11 +456,15 @@ export default function App() {
   Number(backup.goalWeight || 170)
 );
 
-setSavedFoods(
-  Array.isArray(backup.savedFoods)
-    ? backup.savedFoods
-    : []
-);
+if (Array.isArray(backup.savedFoods)) {
+  setSavedFoods(function (currentFoods) {
+    return isAuto
+      ? mergeSavedFoods(currentFoods, backup.savedFoods)
+      : backup.savedFoods;
+  });
+} else if (!isAuto) {
+  setSavedFoods([]);
+}
 
 setSavedWorkouts(
   Array.isArray(backup.savedWorkouts)
