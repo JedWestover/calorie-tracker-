@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "./authConfig";
 import {
@@ -191,6 +191,14 @@ export default function App() {
 
   const isSignedIn = accounts.length > 0;
 
+  const autoRestoreFromOneDrive = useEffectEvent(function () {
+    restoreFromOneDrive(true);
+  });
+
+  const autoBackupToOneDrive = useEffectEvent(function () {
+    backupToOneDrive(true);
+  });
+
   useEffect(function () {
     const acknowledgementTimers = new Map();
 
@@ -279,7 +287,7 @@ export default function App() {
     if (hasAutoRestored.current) return;
 
     hasAutoRestored.current = true;
-    restoreFromOneDrive(true);
+    autoRestoreFromOneDrive();
   }, [isSignedIn, autoRestoreEnabled]);
 
   useEffect(function () {
@@ -292,7 +300,7 @@ export default function App() {
     }
 
     const timer = setTimeout(function () {
-      backupToOneDrive(true);
+      autoBackupToOneDrive();
     }, 5000);
 
     return function () {
